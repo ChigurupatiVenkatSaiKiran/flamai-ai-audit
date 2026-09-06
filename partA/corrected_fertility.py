@@ -55,7 +55,7 @@ except Exception:
     print("[setup] mGPT not available — running gpt2 only.")
 
 SEP = "=" * 70
-LANGUAGES = ["eng", "hin", "kan", "tam"]
+LANGUAGES = ["eng", "hin", "kan", "tam", "tel"]
 
 
 def read_lines(path: str) -> list:

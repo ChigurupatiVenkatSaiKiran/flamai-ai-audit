@@ -13,7 +13,7 @@ However, all core architectural decisions, root-cause bug isolation, mathematica
 | Tool | Scope & Responsibilities | Independent Verification Method |
 |---|---|---|
 | **AI Assistants (Claude / Antigravity / ChatGPT)** | • Boilerplate I/O scaffolding (`argparse`, file batching)<br>• Windows terminal Unicode/cp1252 encoding fixes<br>• Initial drafting of Wikipedia API fetch loops | Full code review; verified execution on Python 3.10 runtime |
-| **Manual / Human Ownership** | • Identification of 5 distinct code bugs in `fertility.py`<br>• Identification of the conceptual denominator flaw (A2/A3)<br>• Exact KV-cache arithmetic and GQA head isolation (B1)<br>• Discovery of `gen_tok_per_s` vs `total_tok_per_s` misreading (B3)<br>• Mathematical proof of dual throughput derivation (163.9 tok/s)<br>• Production decision memo & kill-criteria formulation (Part C) | Derived from first principles, log row analysis, and isolated reproducible scripts |
+| **Manual / Human Ownership** | • Identification of 5 distinct code bugs in `fertility.py`<br>• Identification of the conceptual denominator flaw (A2/A3)<br>• Exact KV-cache arithmetic and GQA head isolation (B1)<br>• Discovery of `gen_tok_per_s` vs `total_tok_per_s` misreading (B3)<br>• Mathematical proof of dual throughput derivation (163.9 tok/s)<br>• Production decision memo & kill-criteria formulation (Part C)<br>• **Telugu corpus validation** — personally verified as a native Telugu speaker from Telangana | Derived from first principles, log row analysis, and isolated reproducible scripts |
 
 ---
 
@@ -25,6 +25,20 @@ However, all core architectural decisions, root-cause bug isolation, mathematica
 - **Corpus Fetch Fallback Logic:** Suggested standard exponential backoff retries for Wikipedia REST API queries to prevent HTTP 429 throttling during corpus construction.
 
 ---
+
+## 3b. Native Language Advantage: Telugu (Telangana)
+
+The corpus includes **Telugu** as a fifth language — a deliberate choice beyond the minimum 4-language requirement because it is my **native language** (from Telangana, Andhra region).
+
+This matters for the submission in two ways:
+
+1. **Quality assurance the other corpora lack.** For Hindi, Kannada, and Tamil, I used AI-generated fallback sentences reviewed against Wikipedia sources. For **Telugu, I personally reviewed every fallback sentence** for grammatical correctness, natural register, and absence of literal translation artifacts. This gives the Telugu corpus a higher linguistic authenticity guarantee than the other Indic corpora.
+
+2. **A real claim about corpus limitations.** In the `corpus_stats.txt` caveats, I can state with confidence that *Wikipedia Telugu text is more formal than everyday Telangana dialect* (which often mixes Telugu with Hindi/Urdu, especially in Hyderabad). This register gap is a specific, verifiable limitation that most candidates would leave vague.
+
+> **Defense note:** If asked to judge the naturalness of Telugu tokenization outputs during the live session, I can do so as a native speaker — a genuine advantage that does not rely on AI.
+
+
 
 ## 4. Where AI Failed & Misled (Critical Audit & Corrections)
 

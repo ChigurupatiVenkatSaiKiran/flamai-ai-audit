@@ -3,7 +3,7 @@
 corpus_prep.py — A1: Build a real multilingual eval corpus.
 
 Strategy:
-  - Uses Wikipedia API to fetch article text in 4 languages (parallel articles).
+  - Uses Wikipedia API to fetch article text in 5 languages (parallel articles).
   - Splits text into sentences using simple heuristics.
   - Falls back to high-quality curated sentences if Wikipedia is unreachable.
   - Adds retry logic + delays between requests to avoid 429 rate limiting.
@@ -13,6 +13,7 @@ Languages:
   - hin (Hindi, Devanagari script)
   - kan (Kannada, Kannada script) — Dravidian
   - tam (Tamil, Tamil script)     — Dravidian
+  - tel (Telugu, Telugu script)   — Dravidian (native language, Telangana)
 
 Source: Wikipedia (CC BY-SA 3.0) + curated fallback sentences
 Topics: 10 Wikipedia articles per language (science, geography, culture, daily life).
@@ -20,7 +21,7 @@ Topics: 10 Wikipedia articles per language (science, geography, culture, daily l
 Usage:
     python corpus_prep.py
 
-Output: corpus/{eng,hin,kan,tam}.txt + corpus/corpus_stats.txt
+Output: corpus/{eng,hin,kan,tam,tel}.txt + corpus/corpus_stats.txt
 """
 
 import os
@@ -69,6 +70,13 @@ WIKI_ARTICLES = {
         "titles": [
             "இந்தியா", "சூரிய_குடும்பம்", "நீர்", "புலி", "கிரிக்கெட்",
             "பருவமழை", "மகாத்மா_காந்தி", "பெங்களூரு", "அரிசி", "கணிதம்"
+        ]
+    },
+    "tel": {
+        "lang_code": "te",
+        "titles": [
+            "భారతదేశం", "సౌరమండలం", "నీరు", "పులి", "క్రికెట్",
+            "రుతుపవనాలు", "మహాత్మా_గాంధీ", "బెంగళూరు", "వరి", "గణితం"
         ]
     },
 }
@@ -440,7 +448,8 @@ def main():
         f.write("  eng — English  : analytic language, Latin script, tokenizer baseline\n")
         f.write("  hin — Hindi    : fusional+agglutinative, Devanagari, largest Indic user base\n")
         f.write("  kan — Kannada  : Dravidian, highly agglutinative, Kannada script\n")
-        f.write("  tam — Tamil    : Dravidian, morphologically rich, classical language\n\n")
+        f.write("  tam — Tamil    : Dravidian, morphologically rich, classical language\n")
+        f.write("  tel — Telugu   : Dravidian, agglutinative, Telugu script (native language — Telangana)\n\n")
         f.write("Corpus statistics:\n")
         for line in stats_lines:
             f.write(line + "\n")

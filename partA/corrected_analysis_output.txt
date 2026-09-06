@@ -8,11 +8,13 @@
   hin         234      7.923      143.3     1.5365         1.5365        18.1
   kan         222     22.494      253.5     2.6852         2.6852        11.3
   tam         248     25.211      239.4     2.7276         2.7276         9.5
+  tel          72     21.677      141.5     2.7365         2.7365         6.5
 
   Cross-language ratios vs eng (tok/word):
     hin: 6.08x (tok/word), 5.05x (tok/sent)
     kan: 17.26x (tok/word), 8.93x (tok/sent)
     tam: 19.34x (tok/word), 8.43x (tok/sent)
+    tel: 16.63x (tok/word), 4.98x (tok/sent)
 
   NOTE: tok/sent is the fairer metric for routing cost decisions.
   tok/word inflates agglutinative languages (Kannada, Tamil)
@@ -25,11 +27,13 @@
   hin         234      3.561       64.4     0.6906         0.6906        18.1
   kan         222     17.331      195.3     2.0688         2.0688        11.3
   tam         248      7.057       67.0     0.7635         0.7635         9.5
+  tel          72      6.268       40.9     0.7913         0.7913         6.5
 
   Cross-language ratios vs eng (tok/word):
     hin: 2.58x (tok/word), 2.15x (tok/sent)
     kan: 12.58x (tok/word), 6.51x (tok/sent)
     tam: 5.12x (tok/word), 2.23x (tok/sent)
+    tel: 4.55x (tok/word), 1.36x (tok/sent)
 
   NOTE: tok/sent is the fairer metric for routing cost decisions.
   tok/word inflates agglutinative languages (Kannada, Tamil)
