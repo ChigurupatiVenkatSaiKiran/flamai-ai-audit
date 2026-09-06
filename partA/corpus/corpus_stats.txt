@@ -1,0 +1,52 @@
+=== A1 Corpus Statistics ===
+
+Source     : Wikipedia (CC BY-SA 3.0) + curated fallback sentences
+Method     : Wikipedia MediaWiki API (action=query, explaintext) with
+             polite 3s delay between requests and 3-attempt retry.
+             Curated sentences supplement any language that does not
+             reach the TARGET_SENTENCES_PER_LANG threshold.
+Articles   : 10 topics per language (India, Solar system, Water, Tiger,
+             Cricket, Monsoon, Mahatma Gandhi, Bangalore, Rice, Mathematics)
+Domain     : General encyclopedic (science, geography, culture, biography)
+
+Languages:
+  eng — English  : analytic language, Latin script, tokenizer baseline
+  hin — Hindi    : fusional+agglutinative, Devanagari, largest Indic user base
+  kan — Kannada  : Dravidian, highly agglutinative, Kannada script
+  tam — Tamil    : Dravidian, morphologically rich, classical language
+
+Corpus statistics:
+  eng (en.wikipedia.org): 217 sentences, 4727 whitespace-words, 29407 chars
+  hin (hi.wikipedia.org): 234 sentences, 4231 whitespace-words, 21818 chars
+  kan (kn.wikipedia.org): 222 sentences, 2502 whitespace-words, 20960 chars
+  tam (ta.wikipedia.org): 248 sentences, 2355 whitespace-words, 21767 chars
+
+Preprocessing:
+  - NFC normalization (unicodedata.normalize)
+  - Section headers (== Heading ==) removed
+  - Whitespace collapsed
+  - Minimum 10 chars / 3 words per sentence
+  - Exact duplicates removed
+  - NO lowercasing (preserves production input distribution)
+
+CAVEATS — What this corpus cannot tell you
+--------------------------------------------------
+1. REGISTER: Wikipedia text is formal/encyclopedic. FlamAI serves conversational
+   replies. Colloquial Kannada/Tamil uses very different vocabulary and shorter
+   phrases. Per-sentence fertility could differ by ±20% in casual register.
+
+2. CODE-SWITCHING: Real Indic traffic frequently mixes scripts (Hinglish:
+   'मुझे coffee chahiye'). This corpus has none. GPT-2 handles mixed-script
+   text very differently (Roman-script portions tokenize efficiently, Devanagari
+   portions don't — the blend is unpredictable).
+
+3. SHORT UTTERANCES: Chat messages are often 3-8 words. Wikipedia sentences
+   average 18-30 words. Short-text fertility differs due to BOS/boundary effects.
+
+4. PARALLELISM: Unlike FLORES-200, this corpus is NOT sentence-parallel across
+   languages (same topics but different articles). tok/sentence cannot be
+   compared directly cross-lingually. We use tok/char and tok/grapheme as
+   supplementary metrics.
+
+5. SAMPLE SIZE: ~200-400 sentences per language gives reliable mean estimates
+   (95% CI half-width < 0.1 tok/word) but may miss tail distributions.
