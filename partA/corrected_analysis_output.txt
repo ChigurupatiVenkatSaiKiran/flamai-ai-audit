@@ -6,15 +6,15 @@
   ------  --------  ----------  ----------  ----------  --------------  -----------
   eng         217      1.303       28.4     0.2095         0.2095        21.8
   hin         234      7.923      143.3     1.5365         1.5365        18.1
-  kan         222     22.494      253.5     2.6852         2.6852        11.3
+  kan         243     22.488      256.7     2.6852         2.6852        11.4
   tam         248     25.211      239.4     2.7276         2.7276         9.5
-  tel         139     21.677      134.1     2.7254         2.7254         6.2
+  tel         169     21.938      153.8     2.7293         2.7293         7.0
 
   Cross-language ratios vs eng (tok/word):
     hin: 6.08x (tok/word), 5.05x (tok/sent)
-    kan: 17.26x (tok/word), 8.93x (tok/sent)
+    kan: 17.25x (tok/word), 9.04x (tok/sent)
     tam: 19.34x (tok/word), 8.43x (tok/sent)
-    tel: 16.63x (tok/word), 4.72x (tok/sent)
+    tel: 16.83x (tok/word), 5.42x (tok/sent)
 
   NOTE: tok/sent is the fairer metric for routing cost decisions.
   tok/word inflates agglutinative languages (Kannada, Tamil)
@@ -25,15 +25,15 @@
   ------  --------  ----------  ----------  ----------  --------------  -----------
   eng         217      1.378       30.0     0.2214         0.2214        21.8
   hin         234      3.561       64.4     0.6906         0.6906        18.1
-  kan         222     17.331      195.3     2.0688         2.0688        11.3
+  kan         243     17.318      197.7     2.0678         2.0678        11.4
   tam         248      7.057       67.0     0.7635         0.7635         9.5
-  tel         139      6.234       38.6     0.7838         0.7838         6.2
+  tel         169      6.306       44.2     0.7846         0.7846         7.0
 
   Cross-language ratios vs eng (tok/word):
     hin: 2.58x (tok/word), 2.15x (tok/sent)
-    kan: 12.58x (tok/word), 6.51x (tok/sent)
+    kan: 12.57x (tok/word), 6.59x (tok/sent)
     tam: 5.12x (tok/word), 2.23x (tok/sent)
-    tel: 4.52x (tok/word), 1.29x (tok/sent)
+    tel: 4.58x (tok/word), 1.47x (tok/sent)
 
   NOTE: tok/sent is the fairer metric for routing cost decisions.
   tok/word inflates agglutinative languages (Kannada, Tamil)
