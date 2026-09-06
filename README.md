@@ -89,10 +89,10 @@ flowchart LR
 | 4 | [📊 Benchmark Results & Experimental Outputs](#-benchmark-results--experimental-outputs) |
 | 5 | [🚀 Quickstart — Reproduce Every Number](#-quickstart--reproduce-every-number) |
 | 6 | [🏗️ Architecture Overview](#%EF%B8%8F-architecture-overview) |
-| 7 | [🧪 Part A — Tokenizer Audit](#-part-a--tokenizer-audit) |
-| 8 | [⚙️ Part B — Capacity Reconciliation](#%EF%B8%8F-part-b--capacity-reconciliation) |
-| 9 | [📋 Part C — Decision Memo](#-part-c--decision-memo) |
-| 10 | [📁 Repository Structure](#-repository-structure) |
+| 7 | [📁 Repository Structure](#-repository-structure) |
+| 8 | [🧪 Part A — Tokenizer Audit](#-part-a--tokenizer-audit) |
+| 9 | [⚙️ Part B — Capacity Reconciliation](#%EF%B8%8F-part-b--capacity-reconciliation) |
+| 10 | [📋 Part C — Decision Memo](#-part-c--decision-memo) |
 | 11 | [🔗 Evidence Trail](#-evidence-trail) |
 | 12 | [🧰 Tech Stack](#-tech-stack) |
 
@@ -301,6 +301,41 @@ flowchart TD
 
 ---
 
+## 📁 Repository Structure
+
+```
+flamai-ai-audit/
+│
+├── 📓 NOTEBOOK.md                    # Chronological lab notebook (4 real dead ends documented)
+├── 🤖 AI_USAGE.md                    # Honest tool usage — 3 places AI misled me, corrected
+├── 📖 README.md                      # Executive audit dashboard & reproduction guide
+│
+├── 📂 partA/                         # The Tokenizer Audit
+│   ├── corpus_prep.py                # A1: Wikipedia API + offline fallback corpus builder
+│   ├── corpus/
+│   │   ├── eng.txt                   # 217 sentences — English baseline
+│   │   ├── hin.txt                   # 234 sentences — Hindi (Devanagari)
+│   │   ├── kan.txt                   # 243 sentences — Kannada (Dravidian)
+│   │   ├── tam.txt                   # 248 sentences — Tamil (Dravidian)
+│   │   ├── tel.txt                   # 214 sentences — Telugu (native speaker verified ✅)
+│   │   └── corpus_stats.txt          # Stats, preprocessing log, honest caveats
+│   ├── audit_fertility.py            # A2: Before/after empirical bug delta script
+│   ├── audit.md                      # A2: Written audit report & root causes
+│   ├── corrected_fertility.py        # A3: gpt2 + mGPT · 4 denominators · reasoning
+│   ├── corrected_analysis_output.txt # A3: Script output (saved)
+│   └── recommendation_memo.md        # A4: ≤1-page production routing recommendation
+│
+├── 📂 partB/                         # Capacity Reconciliation
+│   ├── kv_cache_analysis.py          # B1–B4: All calculations verified vs bench_log.csv
+│   ├── answers.md                    # B1–B4: Written answers with full derivations
+│   └── partB_results.txt             # Verified script output
+│
+└── 📂 partC/                         # Decision Memo
+    └── memo.md                       # SFT vs Rewriter vs Prompt — with full arithmetic
+```
+
+---
+
 ## 🧪 Part A — Tokenizer Audit
 
 ### A1 · Multilingual Corpus
@@ -487,41 +522,6 @@ Success metric:     MOS-C ≥ 3.8/5 across Hindi + Kannada (the reviewable langu
 ```
 
 📄 Full memo with complete arithmetic: [`partC/memo.md`](partC/memo.md)
-
----
-
-## 📁 Repository Structure
-
-```
-your-submission/
-│
-├── 📓 NOTEBOOK.md                    # Chronological lab notebook (4 real dead ends documented)
-├── 🤖 AI_USAGE.md                    # Honest tool usage — 3 places AI misled me, corrected
-├── 📖 README.md                      # This file
-│
-├── 📂 partA/                         # The Tokenizer Audit
-│   ├── corpus_prep.py                # A1: Wikipedia API + offline fallback sentences
-│   ├── corpus/
-│   │   ├── eng.txt                   # 217 sentences — English baseline
-│   │   ├── hin.txt                   # 234 sentences — Hindi (Devanagari)
-│   │   ├── kan.txt                   # 243 sentences — Kannada (Dravidian)
-│   │   ├── tam.txt                   # 248 sentences — Tamil (Dravidian)
-│   │   ├── tel.txt                   # 214 sentences — Telugu (native speaker ✅)
-│   │   └── corpus_stats.txt          # Stats, preprocessing log, honest caveats
-│   ├── audit_fertility.py            # A2: Before/after evidence for all bugs
-│   ├── audit.md                      # A2: Written audit report
-│   ├── corrected_fertility.py        # A3: gpt2 + mGPT · 4 denominators · reasoning
-│   ├── corrected_analysis_output.txt # A3: Script output (saved)
-│   └── recommendation_memo.md        # A4: ≤1-page production routing recommendation
-│
-├── 📂 partB/                         # Capacity Reconciliation
-│   ├── kv_cache_analysis.py          # B1–B4: All calculations verified vs bench_log.csv
-│   ├── answers.md                    # B1–B4: Written answers with full derivations
-│   └── partB_results.txt             # Verified script output
-│
-└── 📂 partC/                         # Decision Memo
-    └── memo.md                       # SFT vs Rewriter vs Prompt — with full arithmetic
-```
 
 ---
 
