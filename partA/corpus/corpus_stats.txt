@@ -24,7 +24,7 @@ Corpus statistics:
   hin (hi.wikipedia.org): 234 sentences, 4231 whitespace-words, 21818 chars
   kan (kn.wikipedia.org): 222 sentences, 2502 whitespace-words, 20960 chars
   tam (ta.wikipedia.org): 248 sentences, 2355 whitespace-words, 21767 chars
-  tel (native verified):   72 sentences,  468 whitespace-words,  7043 chars
+  tel (native verified):  139 sentences,  860 whitespace-words,  6840 chars
 
 Preprocessing:
   - NFC normalization (unicodedata.normalize)
