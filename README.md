@@ -34,6 +34,69 @@
 
 ---
 
+## 🎯 Problem Statement & Context
+
+FlamAI is preparing a multi-million dollar ($XM) GPU cluster deployment to serve conversational LLMs across multiple Indic languages. Prior to our audit, an internal preliminary report (**`REPORT_v0`**) presented flawed benchmarks that would have led to catastrophic infrastructure misallocations:
+
+```mermaid
+flowchart LR
+    subgraph Flawed["❌ REPORT_v0 Flawed Claims"]
+        A1["Tokenizer Bug:\nHindi costs 5.89× vs English\n(Tested on English GPT-2 tokenizer)"]
+        A2["Throughput Overstatement:\n1,311 → 3,200 tok/s\n(Conflated prompt prefill as generation)"]
+        A3["Blind SFT Plan:\nTrain on 6 Indic languages\n(Ignored reviewer bottleneck)"]
+    end
+
+    subgraph Audit["🔍 Our Audit & Solution"]
+        B1["5-Lang Indic Corpus + mGPT\nTrue Hindi cost = 2.15×\n(Saves 2.7× budget overstatement)"]
+        B2["KV-Cache GQA Math + Goodput\nTrue Gen Goodput = 163.9 tok/s\n(Identified batch=32 preemption cliff)"]
+        B3["Prompt-Eng First + MOS-C Gating\nReviewer-aligned Day-5 kill criteria\n(Zero wasted GPU training runs)"]
+    end
+
+    A1 --> B1
+    A2 --> B2
+    A3 --> B3
+
+    style Flawed fill:#7f1d1d,stroke:#ef4444,color:#ffffff
+    style Audit fill:#064e3b,stroke:#10b981,color:#ffffff
+```
+
+### The Three Core Challenges:
+1. **Part A (Tokenizer Distortion):** `REPORT_v0` claimed Hindi costs ~5.89× English based on a buggy script (`split(" ")` bugs and mean-of-ratios distortion) using GPT-2's English-centric vocabulary where Indic characters decompose into 3–4 byte fallback tokens.
+2. **Part B (Capacity Miscalculation):** `REPORT_v0` cited `1,311 tok/s` as generation throughput and projected `3,200 tok/s` at batch 48. They misread total system throughput (prompt + generation) as generation goodput and missed that batch 32 & 48 suffered severe KV-cache memory thrashing and request preemptions.
+3. **Part C (Style Transfer Strategy):** Making assistant replies casual in 6 Indic languages under severe real-world constraints: only 10 hours/week of reviewer time for Hindi and Kannada, and zero human reviewers for Telugu, Tamil, Bengali, or Marathi.
+
+---
+
+## 💡 Solution Overview & Key Findings
+
+| Area | Challenge & Flaw | Our Rigorous Audit & Solution | Production Impact |
+|---|---|---|---|
+| **Part A: Corpus** | Synthetic or uncurated text skewing fertility metrics | Built a balanced **5-language corpus** (eng, hin, kan, tam, tel) with 200+ sentences each. **Telugu** personally verified by a native speaker. | Grounded, reproducible baseline across analytic, fusional, and agglutinative families. |
+| **Part A: Tokenizer** | 5 code bugs + byte-fallback inflation (GPT-2) | Fixed whitespace tokenization bugs. Benchmarked against **`ai-forever/mGPT`** (multilingual BPE). Discovered Kannada representation anomaly. | Hindi cost drops from 5.89× to **2.15×**; prevents $XM GPU over-budgeting. |
+| **Part B: KV Cache** | Risk of using 24 query heads instead of 8 KV heads | Derived exact GQA arithmetic: **114,688 bytes/tok (112 KB)**. Proved max concurrency is **28 sequences** on 24 GB GPU. | Pinpointed mathematical ceiling before out-of-memory. |
+| **Part B: Goodput** | Conflating prefill tokens with decode tokens (1,311 tok/s) | Proved true generation goodput is **163.9 tok/s** (an **8× correction**). Identified batch=24 as peak before preemption cliff. | Configured `max_num_seqs = 22` to stabilize latency & prevent compute thrashing. |
+| **Part C: Strategy** | Blind fine-tuning across unreviewable languages | Designed a **Prompt-Engineering-First** architecture with 12 eval cycles and an empirical **MOS-C Day-5 kill criterion**. | Deploys Day 1; avoids blind hallucinations in unreviewed languages. |
+
+---
+
+## 📋 Table of Contents
+
+| # | Section |
+|---|---------|
+| 1 | [🎯 Problem Statement & Context](#-problem-statement--context) |
+| 2 | [💡 Solution Overview & Key Findings](#-solution-overview--key-findings) |
+| 3 | [⚡ TL;DR — Five Numbers That Tell the Story](#-tldr--five-numbers-that-tell-the-story) |
+| 4 | [🚀 Quickstart — Reproduce Every Number](#-quickstart--reproduce-every-number) |
+| 5 | [🏗️ Architecture Overview](#%EF%B8%8F-architecture-overview) |
+| 6 | [🧪 Part A — Tokenizer Audit](#-part-a--tokenizer-audit) |
+| 7 | [⚙️ Part B — Capacity Reconciliation](#%EF%B8%8F-part-b--capacity-reconciliation) |
+| 8 | [📋 Part C — Decision Memo](#-part-c--decision-memo) |
+| 9 | [📁 Repository Structure](#-repository-structure) |
+| 10 | [🔗 Evidence Trail](#-evidence-trail) |
+| 11 | [🧰 Tech Stack](#-tech-stack) |
+
+---
+
 ## ⚡ TL;DR — Five Numbers That Tell the Story
 
 <div align="center">
@@ -50,26 +113,11 @@
 
 ---
 
-## 📋 Table of Contents
-
-| # | Section |
-|---|---------|
-| 1 | [🚀 Quickstart — Reproduce Every Number](#-quickstart--reproduce-every-number) |
-| 2 | [🏗️ Architecture Overview](#%EF%B8%8F-architecture-overview) |
-| 3 | [🧪 Part A — Tokenizer Audit](#-part-a--tokenizer-audit) |
-| 4 | [⚙️ Part B — Capacity Reconciliation](#%EF%B8%8F-part-b--capacity-reconciliation) |
-| 5 | [📋 Part C — Decision Memo](#-part-c--decision-memo) |
-| 6 | [📁 Repository Structure](#-repository-structure) |
-| 7 | [🔗 Evidence Trail](#-evidence-trail) |
-| 8 | [🧰 Tech Stack](#-tech-stack) |
-
----
-
 ## 🚀 Quickstart — Reproduce Every Number
 
 ```bash
-git clone <repo-url>
-cd your-submission
+git clone https://github.com/ChigurupatiVenkatSaiKiran/flamai-ai-audit.git
+cd flamai-ai-audit
 ```
 
 ```bash
